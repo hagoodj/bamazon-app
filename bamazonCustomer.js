@@ -19,10 +19,23 @@ connection.connect(function (err) {
 function afterConnection() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log("Product ID | Product Name | Department | Price | Stock")
+        var table = new Table({
+            chars: {
+                'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
+                , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
+                , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
+                , 'right': '║', 'right-mid': '╢', 'middle': '│'
+            }
+        });
+        table.push(
+            ['Product ID', 'Product', 'Department', 'Price', 'Quanity']
+        );
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity)
+            table.push(
+                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
+            )
         }
+        console.log(table.toString());
         product();
     });
 }
