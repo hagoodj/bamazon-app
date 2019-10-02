@@ -90,3 +90,40 @@ function viewLowInventory() {
     });
 }
 
+function addToInventory() {
+    inquirer
+        .prompt([{
+            name: "productID",
+            type: "number",
+            message: "What is the ID of the product you would like to add inventory?",
+        }, {
+            name: "quantity",
+            type: "number",
+            message: "How much would you like to add to the inventory?",
+        }])
+        .then(function (answer) {
+            connection.query("SELECT * FROM products WHERE item_id =?", [parseInt(answer.productID)], function (err, res) {
+                if (err) throw err;
+
+                var newQuantity = res[0].stock_quantity + parseInt(answer.quantity);
+                connection.query(
+                    "UPDATE products SET ? WHERE ?",
+                    [
+                        {
+                            stock_quantity: newQuantity
+                        },
+                        {
+                            item_id: answer.productID
+                        }
+                    ],
+                    function (error) {
+                        if (error) throw err;
+                        console.log("Successfully Added " + answer.quantity + " to " + res[0].product_name + " stock.")
+                        console.log('*******************************************************************************************')
+                        afterConnection();
+                    }
+                );
+
+            })
+        });
+}
