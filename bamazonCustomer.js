@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require('cli-table');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -26,3 +27,44 @@ function afterConnection() {
     });
 }
 
+function product() {
+    inquirer
+        .prompt([{
+            name: "productID",
+            type: "number",
+            message: "What is the ID of the product you would like to buy?",
+        }, {
+            name: "quantity",
+            type: "number",
+            message: "How many would you like?",
+        }])
+        .then(function (answer) {
+            connection.query("SELECT * FROM products WHERE item_id =?", [parseInt(answer.productID)], function (err, res) {
+                if (err) throw err;
+                if (parseInt(answer.quantity) > res[0].stock_quantity) {
+                    console.log("Insufficient Quantity")
+                    console.log('*******************************************************************************************')
+                    afterConnection();
+                } else {
+                    var newQuantity = res[0].stock_quantity - parseInt(answer.quantity);
+                    connection.query(
+                        "UPDATE products SET ? WHERE ?",
+                        [
+                            {
+                                stock_quantity: newQuantity
+                            },
+                            {
+                                item_id: answer.productID
+                            }
+                        ],
+                        function (error) {
+                            if (error) throw err;
+                            console.log("Successfully purchased " + answer.quantity + " " + res[0].product_name)
+                            console.log('*******************************************************************************************')
+                            afterConnection();
+                        }
+                    );
+                }
+            })
+        });
+}
