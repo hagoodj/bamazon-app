@@ -8,7 +8,7 @@ As a manager, the bamazon app displays options to view product list, view low in
 ## Functionality Video: bamazonCustomer
 ![video](./bamazonCustomer.gif)
 
-## Functionality Video: bamazonCustomer
+## Functionality Video: bamazonManager
 ![video](./bamazonManager.gif)
 
 ## Technologies Used 
