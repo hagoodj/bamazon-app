@@ -20,7 +20,7 @@ As a manager, the bamazon app displays options to view product list, view low in
 - Github - Hosts repository that can be deployed to GitHub pages
 
 ## Code Snippet
-The following code shows the product function. This function is executed when the bamazon customer runs the app. Once the customer answers the prompt, the product with the product ID the customer chooses is selected from the product table created in MySQL and the stock quantity is updated.
+The following code shows the product function. The prompt is displayed when the bamazon customer runs the app. Once the customer answers the prompt, the product with the product ID the customer chooses is selected from the product table created in MySQL and the stock quantity is updated.
 ```js
 function product() {
     inquirer
