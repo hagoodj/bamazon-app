@@ -56,10 +56,10 @@ function product() {
                 if (err) throw err;
                 if (parseInt(answer.quantity) > res[0].stock_quantity) {
                     console.log("Insufficient Quantity")
-                    console.log('*******************************************************************************************')
                     afterConnection();
                 } else {
                     var newQuantity = res[0].stock_quantity - parseInt(answer.quantity);
+                    totalCost = res[0].price*answer.quantity;
                     connection.query(
                         "UPDATE products SET ? WHERE ?",
                         [
@@ -72,8 +72,8 @@ function product() {
                         ],
                         function (error) {
                             if (error) throw err;
+                            console.log("The total cost of your purchase is $" + totalCost)
                             console.log("Successfully purchased " + answer.quantity + " " + res[0].product_name)
-                            console.log('*******************************************************************************************')
                             afterConnection();
                         }
                     );
