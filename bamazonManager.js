@@ -119,11 +119,48 @@ function addToInventory() {
                     function (error) {
                         if (error) throw err;
                         console.log("Successfully Added " + answer.quantity + " to " + res[0].product_name + " stock.")
-                        console.log('*******************************************************************************************')
                         afterConnection();
                     }
                 );
 
             })
+        });
+}
+
+function addProduct() {
+    inquirer
+        .prompt([{
+            name: "product",
+            type: "input",
+            message: "What is the name of the product you would like to add?",
+        }, {
+            name: "department",
+            type: "list",
+            message: "What department does this item belong in?",
+            choices: ["Irrelevant", "Unnecessary", "VSCO Girl"]
+        }, {
+            name: "price",
+            type: "number",
+            message: "What is the price of this product?",
+        }, {
+            name: "stock",
+            type: "number",
+            message: "How many are in the inventory?",
+        }])
+        .then(function (answer) {
+            connection.query(
+                "INSERT INTO products SET ?",
+                {
+                  product_name: answer.product,
+                  department_name: answer.department,
+                  price: answer.price,
+                  stock_quantity: answer.stock
+                },
+                function(err) {
+                  if (err) throw err;
+                  console.log("Your product was added successfully!");
+                  afterConnection();
+                }
+              );
         });
 }
